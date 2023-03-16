@@ -1,0 +1,33 @@
+{
+  "dependencies": {
+    "axios": "^0.27.2",
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "express": "^4.18.1",
+    "express-handlebars": "^6.0.6",
+    "express-session": "^1.17.3",
+    "nodemon": "^2.0.21",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.7.3",
+    "sequelize": "^6.21.2"
+  },
+  "name": "festivaldacancao",
+  "description": "",
+  "version": "1.0.0",
+  "main": "servidor.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eduardoviega/FestivalDaCancao.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eduardoviega/FestivalDaCancao/issues"
+  },
+  "homepage": "https://github.com/eduardoviega/FestivalDaCancao#readme"
+}
