@@ -1,24 +1,12 @@
 var express = require("express")
-var servidor = express()
+var rotas = require('./routes/usuarioRota')
 
-const PORTA = 80
+var aplicacao = express()
+var PORTA = 80
 
-servidor.listen(PORTA, function(){
-    console.log("Servidor http rodando na porta " + PORTA + "...");
-})
+aplicacao.use(express.urlencoded({extended: true}))
+aplicacao.use(rotas)
 
-servidor.get("/", function(req, res){
-    res.sendFile(__dirname + "/views/login.html")
-})
-
-servidor.get("/cadastro", function(req, res){
-    res.send("cadastro")
-})
-
-servidor.get("/login", function(req, res){
-    res.send("login")
-})
-
-servidor.get("/votacao", function(req, res){
-    res.send("votacao")
+aplicacao.listen(PORTA, function(){
+    console.log(`Servidor http rodando na porta ${PORTA}...`);
 })

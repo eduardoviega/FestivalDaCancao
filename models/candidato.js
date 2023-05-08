@@ -1,7 +1,8 @@
 var sequelize = require("sequelize")
 var banco = require("./../configs/bancoConfig")
 var apresentacao = require("./apresentacao")
-var usuario = require("./usuario")
+var usuario = require("./usuario");
+const apre = require("../controllers/apresentacaoController");
 
 var candidato = banco.define('candidato', {
     idCandidato: {
@@ -15,19 +16,8 @@ var candidato = banco.define('candidato', {
     timestamps: false
 });
 
-apresentacao.hasOne(candidato, {
-    foreignKey: "idApresentacao"
-});
-candidato.belongsTo(apresentacao, {
-    foreignKey: "idApresentacao"
-});
-
-usuario.hasOne(candidato, {
-    foreignKey: "idUsuario"
-});
-candidato.belongsTo(usuario, {
-    foreignKey: "idUsuario"
-});
+apresentacao.hasOne(candidato, { foreignKey: "idApresentacao" });
+usuario.hasOne(candidato, { foreignKey: "idUsuario" });
 
 candidato.sync()
 

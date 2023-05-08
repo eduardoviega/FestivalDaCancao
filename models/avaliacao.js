@@ -18,19 +18,8 @@ var avaliacao = banco.define('avaliacao', {
     timestamps: false    
 });
 
-apresentacao.hasOne(avaliacao, {
-    foreignKey: "idApresentacao"
-});
-avaliacao.belongsTo(apresentacao, {
-    foreignKey: "idApresentacao"
-});
-
-candidato.hasOne(avaliacao, {
-    foreignKey: "idCandidato"
-});
-avaliacao.belongsTo(candidato, {
-    foreignKey: "idCandidato"
-});
+apresentacao.hasOne(avaliacao, { foreignKey: "idApresentacao" });
+candidato.hasOne(avaliacao, { foreignKey: "idCandidato" });
 
 avaliacao.sync()
 
