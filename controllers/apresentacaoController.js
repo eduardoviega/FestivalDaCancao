@@ -99,26 +99,28 @@ apresentacaoControlador.cadastroApresentacao = function(req, res){
     )
 }
 
-apresentacaoControlador.cadastroCandidatoApresentacao = function(req, res){
-    var idAp = apresentacaoControlador.create(req, res)
-    let usuarios = req.body.idUsuario.filter((user) => user != "")
+apresentacaoControlador.cadastroCandidatoApresentacao = function(req, res) {
+    apresentacao.create({
+        nome: req.body.nome
+    }).then(function(dados) {
+        var idAp = dados.idApresentacao; // Armazena o ID da apresentação criada
 
-    console.log(idAp);
-
-    usuarios.forEach(element => {
-        candidato.create({
-            idApresentacao: idApresentacaoCreate,
-            idUsuario: element
-        }).then(
-            function(dados) {
-
-            }
-        ).catch(
-            function(erro) {
-                res.status(500).send("Erro no cadastro do Candidato: "+erro)    
-            }
-        )
+        console.log(req.body.idUsuario)
+        let usuarios = req.body.idUsuario.filter((user) => user != "");
+        usuarios.forEach(element => {
+            candidato.create({
+                idApresentacao: idAp, // Atribui o ID da apresentação ao campo idApresentacao de cada usuário
+                idUsuario: element
+            }).then(function() {
+                // Lógica após o cadastro do candidato
+            }).catch(function(erro) {
+                res.status(500).send("Erro no cadastro do Candidato: " + erro);
+            });
+        });
+    }).catch(function(erro) {
+        res.status(500).send("Erro no cadastro da apresentação: " + erro);
     });
-}
+    res.render("cadastroApresentacao")
+};
 
 module.exports = apresentacaoControlador
