@@ -85,4 +85,10 @@ usuarioControlador.destroy = function(req, res){
     )
 }
 
+//----------------------------------------------------------------------------
+
+usuarioControlador.cadastroUsuario = function(req, res){
+    res.render("cadastroUsuario")
+}
+
 module.exports = usuarioControlador

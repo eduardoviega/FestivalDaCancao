@@ -12,6 +12,10 @@ var avaliacao = banco.define('avaliacao', {
     nota: {
         type: sequelize.INTEGER,
         allowNull: false,
+    },
+    descricao: {
+        type: sequelize.STRING,
+        allowNull: false,
     }
 }, {
     freezeTableName: true,

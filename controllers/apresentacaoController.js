@@ -1,14 +1,16 @@
 const { raw } = require("express")
-var apresentacao = require("./../models/apresentacao")
+const usuario = require("../models/usuario")
+var apresentacao = require("../models/apresentacao")
+var candidato = require("./../models/candidato")
 
 var apresentacaoControlador = {}
 
-apresentacaoControlador.inserir = function(req, res){
+apresentacaoControlador.create = function(req, res){
     apresentacao.create({
         nome: req.body.nome
     }).then(
         function(dados) {
-            res.status(200).send(`Apresentação ${req.body.nome} cadastrada com sucesso!`)    
+            res.status(200).json({ idApresentacao: dados.idApresentacao });
         }
     ).catch(
         function(erro) {
@@ -56,7 +58,7 @@ apresentacaoControlador.update = function(req, res){
         }
     }).then(
         function(dados){
-            res.status(200)
+            res.sendStatus(200)
         }
     ).catch(
         function(erro) {
@@ -79,6 +81,44 @@ apresentacaoControlador.destroy = function(req, res){
             res.status(500).send(`Erro ao remover a apresentação: `+erro)
         }
     )
+}
+
+// ------------------------------------------------------------------------
+
+apresentacaoControlador.cadastroApresentacao = function(req, res){
+    usuario.findAll({
+        raw: true
+    }).then(
+        function(dados){
+            res.render("cadastroApresentacao", {nome: dados})
+        }
+    ).catch(
+        function(erro) {
+            res.status(500).send(`Erro ao buscar os usuários: `+erro)
+        }
+    )
+}
+
+apresentacaoControlador.cadastroCandidatoApresentacao = function(req, res){
+    var idAp = apresentacaoControlador.create(req, res)
+    let usuarios = req.body.idUsuario.filter((user) => user != "")
+
+    console.log(idAp);
+
+    usuarios.forEach(element => {
+        candidato.create({
+            idApresentacao: idApresentacaoCreate,
+            idUsuario: element
+        }).then(
+            function(dados) {
+
+            }
+        ).catch(
+            function(erro) {
+                res.status(500).send("Erro no cadastro do Candidato: "+erro)    
+            }
+        )
+    });
 }
 
 module.exports = apresentacaoControlador
