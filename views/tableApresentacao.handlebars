@@ -1,0 +1,28 @@
+<a href="/cadastrarApresentacao"><button type="button" class="btn btn-success">Adicionar</button></a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Nome da Apresentação:</th>
+            <th scope="col">Participantes:</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each apresentacao}}
+            <tr>
+                <th scope="row">{{nome}}</th>
+                <th>
+                    <ul>
+                        {{#each usuarios}}
+                            <li>{{username}}</li>
+                        {{/each}}
+                    </ul>
+                </th>
+                <td>
+                    <a href="/ediReq/{{idApresentacao}}"><button type="submit" class="btn btn-warning">Editar - {{idApresentacao}}</button></a>
+                    <a href="/deleteApresentacao/{{idApresentacao}}"><button type="submit" class="btn btn-danger">Apagar</button></a>
+                </td>
+            </tr>
+        {{/each}}
+    </tbody>
+</table>

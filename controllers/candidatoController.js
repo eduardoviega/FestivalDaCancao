@@ -55,7 +55,7 @@ candidatoControlador.update = function(req, res){
 candidatoControlador.destroy = function(req, res){
     candidato.destroy({
         where: {
-            idApresentacao: req.params.id
+            idCandidato: req.params.id
         }
     }).then(
         function(dados){
