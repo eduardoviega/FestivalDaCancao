@@ -9,20 +9,36 @@
     </thead>
     <tbody>
         {{#each apresentacao}}
-            <tr>
-                <th scope="row">{{nome}}</th>
-                <th>
-                    <ul>
-                        {{#each usuarios}}
-                            <li>{{username}}</li>
-                        {{/each}}
-                    </ul>
-                </th>
-                <td style="text-align: right; border-bottom-width: 1px #000;">
-                    <a href="/editarApresentacao/{{idApresentacao}}"><button type="submit" class="btn btn-warning">Editar - {{idApresentacao}}</button></a>
-                    <a href="/deleteApresentacao/{{idApresentacao}}"><button type="submit" class="btn btn-danger">Apagar</button></a>
-                </td>
-            </tr>
+        <tr>
+            <th class="note" scope="row" style="font-weight: 400;">{{nome}}</th>
+            <th>
+                <ul>
+                    {{#each usuarios}}
+                    <li style="font-weight: 400;" class="note">{{username}}</li>
+                    {{/each}}
+                </ul>
+            </th>
+            <td style="text-align: right; border-bottom-width: 1px #000;">
+                <a href="/editarApresentacao/{{idApresentacao}}"><button type="submit" class="btn btn-warning">Editar -
+                        {{idApresentacao}}</button></a>
+                <a href="/deleteApresentacao/{{idApresentacao}}"><button type="submit"
+                        class="btn btn-danger">Apagar</button></a>
+            </td>
+        </tr>
         {{/each}}
     </tbody>
 </table>
+
+<style>
+    .note {
+        list-style-type: none;
+        line-height: 1;
+    }
+
+    .note::before {
+        content: "\1F3B5";
+        display: inline-block;
+        margin-right: 5px;
+        font-size: 14px;
+    }
+</style>

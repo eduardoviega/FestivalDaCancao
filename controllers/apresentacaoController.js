@@ -70,7 +70,7 @@ apresentacaoControlador.update = function (req, res) {
     )
 }
 
-apresentacaoControlador.destroy = function(req, res){
+apresentacaoControlador.destroy = function (req, res) {
     apresentacao.destroy({
         where: {
             idApresentacao: req.params.id
@@ -155,31 +155,67 @@ apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
     })
 }
 
+// Traz os usuários na página de editar
 apresentacaoControlador.editarApresentacaoCandidato = function (req, res) {
     usuario.findAll({
         raw: true
     }).then((dados) => {
-        res.render("editarApresentacao", { nome: dados })
+        res.render("editarApresentacao", { nome: dados, idApresentacao: req.params.id })
     }).catch((erro) => {
         res.status(500).send(`Erro ao buscar os usuários: ` + erro)
     })
 }
 
-apresentacaoControlador.montarReqEdicao = function(req, res){
-    axios.put("/" + req.params.id,
-    qs.stringify({
-        nome: req.body.nome,
-
-    }),
-    {
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        proxy: {
-            port: 80
+// Faz a edição da apresentação
+apresentacaoControlador.montarReqEdicao = function (req, res) {
+    axios.put("/apresentacao/" + req.params.id,
+    // dentro do qs passar os dados que serão alterados e alterar também no update da apresentacao
+        qs.stringify({
+            nome: req.body.nome,
+        }),
+        {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            proxy: {
+                port: 80
+            }
         }
-    }
-    )
+    ).then(() => {
+        res.status(200).redirect("/apresentacao")
+    }).catch((erro) => {
+        res.status(500).send("Erro na edição da Apresentação: " + erro)
+    });
+
+    candidato.findAll({
+        raw: true,
+        where: {
+            idApresentacao: req.params.id
+        }
+    }).then((candidatos) => {
+        candidatos.forEach((candidato) => {
+            axios.delete('/candidato/' + candidato.idCandidato
+            ).then(
+            ).catch((erro) => {
+                res.status(500).send("Erro na exclusão do Candidato: " + erro)
+            })
+        })
+    }).catch((erro) => {
+        res.status(500).send("Erro ao buscar Participantes: " + erro)
+    })
+
+    var idAp = req.params.id
+    var usuarios = req.body.idUsuario.filter((user) => user != "")
+    usuarios.forEach(element => {
+        candidato.create({
+            idApresentacao: idAp,
+            idUsuario: element
+        }).then(
+        ).catch((erro) => {
+            res.status(500).send("Erro no cadastro do Candidato: " + erro)
+        })
+    })
+    apresentacaoControlador.listaApresentacaoCandidato(req, res)
 }
 
 apresentacaoControlador.deleteApresentacaoCandidato = function (req, res) {
@@ -190,13 +226,13 @@ apresentacaoControlador.deleteApresentacaoCandidato = function (req, res) {
         }
     }).then((candidatos) => {
         candidatos.forEach((candidato) => {
-            axios.delete('/candidato/'+candidato.idCandidato
+            axios.delete('/candidato/' + candidato.idCandidato
             ).then(
             ).catch((erro) => {
                 res.status(500).send("Erro na exclusão do Candidato: " + erro)
             })
         })
-        axios.delete('/apresentacao/'+req.params.id
+        axios.delete('/apresentacao/' + req.params.id
         ).then(() => {
             res.status(200).redirect("/apresentacao")
         }).catch((erro) => {
