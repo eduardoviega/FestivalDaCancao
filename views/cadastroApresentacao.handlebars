@@ -55,9 +55,10 @@
         <select name="idUsuario" id="selectParticipante" class="form-select">
             <option value="">Selecionar</option>
             {{#each nome}}
-            <option value="{{idUsuario}}">{{nome}} - {{idUsuario}}</option>
+                <option value="{{idUsuario}}">{{nome}} - {{idUsuario}}</option>
             {{/each}}
         </select>
     </div>
 
-    <button type="submit">Cadastrar</button>
+    <button type="submit" class="btn btn-success">Cadastrar</button>
+</form>

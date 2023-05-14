@@ -17,6 +17,8 @@ rotas.delete("/usuario/:id", usuarioController.destroy);
 rotas.get("/cadastrarApresentacao", apresentacaoController.cadastroApresentacao);
 rotas.get("/cadastrarUsuario", usuarioController.cadastroUsuario);
 rotas.get("/apresentacao", apresentacaoController.listaApresentacaoCandidato);
+rotas.get("/editarApresentacao/:id", apresentacaoController.editarApresentacaoCandidato);
+rotas.post("/editar/:id", apresentacaoController.montarReqEdicao);
 rotas.get("/deleteApresentacao/:id", apresentacaoController.deleteApresentacaoCandidato);
 
 // //Rotas de Apresentação da API

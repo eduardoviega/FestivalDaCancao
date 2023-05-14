@@ -155,6 +155,33 @@ apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
     })
 }
 
+apresentacaoControlador.editarApresentacaoCandidato = function (req, res) {
+    usuario.findAll({
+        raw: true
+    }).then((dados) => {
+        res.render("editarApresentacao", { nome: dados })
+    }).catch((erro) => {
+        res.status(500).send(`Erro ao buscar os usuários: ` + erro)
+    })
+}
+
+apresentacaoControlador.montarReqEdicao = function(req, res){
+    axios.put("/" + req.params.id,
+    qs.stringify({
+        nome: req.body.nome,
+
+    }),
+    {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        proxy: {
+            port: 80
+        }
+    }
+    )
+}
+
 apresentacaoControlador.deleteApresentacaoCandidato = function (req, res) {
     candidato.findAll({
         raw: true,

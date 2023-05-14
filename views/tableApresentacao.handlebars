@@ -1,7 +1,7 @@
-<a href="/cadastrarApresentacao"><button type="button" class="btn btn-success">Adicionar</button></a>
-
+<a href="/cadastrarApresentacao"><button type="button" class="my-4 btn btn-success">Adicionar Apresentação</button></a>
+<a href="/cadastrarUsuario"><button type="button" class="my-4 btn btn-success">Cadastrar Usuário</button></a>
 <table class="table">
-    <thead>
+    <thead style="border-bottom-width: 1px; border-color: #000;">
         <tr>
             <th scope="col">Nome da Apresentação:</th>
             <th scope="col">Participantes:</th>
@@ -18,8 +18,8 @@
                         {{/each}}
                     </ul>
                 </th>
-                <td>
-                    <a href="/ediReq/{{idApresentacao}}"><button type="submit" class="btn btn-warning">Editar - {{idApresentacao}}</button></a>
+                <td style="text-align: right; border-bottom-width: 1px #000;">
+                    <a href="/editarApresentacao/{{idApresentacao}}"><button type="submit" class="btn btn-warning">Editar - {{idApresentacao}}</button></a>
                     <a href="/deleteApresentacao/{{idApresentacao}}"><button type="submit" class="btn btn-danger">Apagar</button></a>
                 </td>
             </tr>
