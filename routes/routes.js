@@ -6,6 +6,8 @@ var avaliacaoController = require('../controllers/avaliacaoController')
 
 var rotas = express.Router()
 
+rotas.get("/login", usuarioController.mostrarFormLogin)
+
 // Rotas de Usuário da API
 rotas.post("/usuario", usuarioController.create);
 rotas.get("/usuario/:id", usuarioController.findOne);

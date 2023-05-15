@@ -91,4 +91,12 @@ usuarioControlador.cadastroUsuario = function(req, res){
     res.render("cadastroUsuario")
 }
 
+usuarioControlador.mostrarFormLogin = function (req, res) {
+    try {
+        res.render("login")
+    } catch (error) {
+        res.status(500).send("Erro ao acessar página de login: " + error);
+    }
+};
+
 module.exports = usuarioControlador
