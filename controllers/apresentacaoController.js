@@ -92,7 +92,8 @@ apresentacaoControlador.cadastroApresentacao = function (req, res) {
     usuario.findAll({
         raw: true
     }).then((dados) => {
-        res.render("cadastroApresentacao", { nome: dados })
+        dados = dados.filter(user => user.idUsuario != req.user.idUsuario)
+        res.render("cadastroApresentacao", { nome: dados, usuario: req.user })
     }).catch((erro) => {
         res.status(500).send(`Erro ao buscar os usuários: ` + erro)
     })
@@ -139,7 +140,7 @@ apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
                             idUsuario: candidato.idUsuario
                         }
                     }).then((usuario) => {
-                        usuariosAp.push({ username: usuario.nome })
+                        usuariosAp.push({ username: `${usuario.nome} - ${usuario.idUsuario}` })
                     }).catch((erro) => {
                         res.status(500).send(`Erro ao buscar Usuário: ` + erro)
                     })

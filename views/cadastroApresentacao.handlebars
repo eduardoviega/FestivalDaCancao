@@ -7,7 +7,9 @@
         
     <div class="mb-3">
         <label for="usuario" class="form-label">Participantes:</label>
-        <input type="text" id="usuario" name="idUsuario" value="{{usuarioLogado}}" class="form-control" readonly>
+        <select name="idUsuario" id="selectParticipante" class="form-select" style="pointer-events: none;">
+            <option value="{{usuario.dataValues.idUsuario}}">{{usuario.dataValues.nome}} - {{usuario.dataValues.idUsuario}}</option>
+        </select>
     </div>
 
     <div class="mb-3">
@@ -61,4 +63,5 @@
     </div>
 
     <button type="submit" class="btn btn-success">Cadastrar</button>
+    <a href="/apresentacao"><button type="button" class="my-4 btn btn-danger">Voltar</button></a>
 </form>

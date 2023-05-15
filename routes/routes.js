@@ -21,10 +21,10 @@ rotas.delete("/usuario/:id", usuarioController.destroy);
 // Rota das páginas
 rotas.get("/cadastrarApresentacao", autenticado, apresentacaoController.cadastroApresentacao);
 rotas.get("/cadastrarUsuario", usuarioController.cadastroUsuario);
-rotas.get("/apresentacao", admin, apresentacaoController.listaApresentacaoCandidato);
-rotas.get("/editarApresentacao/:id", apresentacaoController.editarApresentacaoCandidato);
-rotas.post("/editar/:id", apresentacaoController.montarReqEdicao);
-rotas.get("/deleteApresentacao/:id", apresentacaoController.deleteApresentacaoCandidato);
+rotas.get("/apresentacao", autenticado, apresentacaoController.listaApresentacaoCandidato);
+rotas.get("/editarApresentacao/:id", autenticado, apresentacaoController.editarApresentacaoCandidato);
+rotas.post("/editar/:id", autenticado, apresentacaoController.montarReqEdicao);
+rotas.get("/deleteApresentacao/:id", autenticado, apresentacaoController.deleteApresentacaoCandidato);
 
 // //Rotas de Apresentação da API
 rotas.post("/apresentacao", apresentacaoController.cadastroCandidatoApresentacao);

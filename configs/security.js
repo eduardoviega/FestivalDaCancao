@@ -1,6 +1,5 @@
 var localStrategy = require("passport-local").Strategy
 
-const { log } = require("console");
 //modelo do usuário
 var Usuario = require('../models/usuario');
 

@@ -12,7 +12,7 @@ aplicacao.use(session({
     secret: "provanode",
     resave: true,
     saveUninitialized: true,
-    cookie: { maxAge: 10 * 60 * 1000} //10min
+    cookie: { maxAge: 30 * 60 * 1000} //30min
 }))
 aplicacao.use(passport.initialize())
 aplicacao.use(passport.session())
