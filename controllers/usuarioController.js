@@ -1,5 +1,7 @@
 const { raw } = require("express")
 var usuario = require("./../models/usuario")
+const { route } = require("../routes/routes")
+var axios = require("axios")
 
 var usuarioControlador = {}
 
@@ -11,7 +13,7 @@ usuarioControlador.create = function(req, res){
         administrador: req.body.administrador
     }).then(
         function(dados) {
-            res.status(200).send(`Usuario ${req.body.nome} cadastrado com sucesso!`)    
+            res.render('login')   
         }
     ).catch(
         function(erro) {
@@ -93,7 +95,10 @@ usuarioControlador.cadastroUsuario = function(req, res){
 
 usuarioControlador.mostrarFormLogin = function (req, res) {
     try {
-        res.render("login")
+        req.logout(req.user, erro => {
+            if(erro) return next(erro);
+            res.render("login")
+        })
     } catch (error) {
         res.status(500).send("Erro ao acessar página de login: " + error);
     }

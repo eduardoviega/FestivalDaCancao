@@ -3,6 +3,9 @@ var usuarioController = require('../controllers/usuarioController')
 var apresentacaoController = require('../controllers/apresentacaoController')
 var candidatoController = require('../controllers/candidatoController')
 var avaliacaoController = require('../controllers/avaliacaoController')
+const passport = require("passport");
+const {autenticado} = require("../helpers/acesso")
+const {admin} = require("../helpers/acesso")
 
 var rotas = express.Router()
 
@@ -16,9 +19,9 @@ rotas.put("/usuario/:id", usuarioController.update);
 rotas.delete("/usuario/:id", usuarioController.destroy);
 
 // Rota das páginas
-rotas.get("/cadastrarApresentacao", apresentacaoController.cadastroApresentacao);
+rotas.get("/cadastrarApresentacao", autenticado, apresentacaoController.cadastroApresentacao);
 rotas.get("/cadastrarUsuario", usuarioController.cadastroUsuario);
-rotas.get("/apresentacao", apresentacaoController.listaApresentacaoCandidato);
+rotas.get("/apresentacao", admin, apresentacaoController.listaApresentacaoCandidato);
 rotas.get("/editarApresentacao/:id", apresentacaoController.editarApresentacaoCandidato);
 rotas.post("/editar/:id", apresentacaoController.montarReqEdicao);
 rotas.get("/deleteApresentacao/:id", apresentacaoController.deleteApresentacaoCandidato);
@@ -44,6 +47,20 @@ rotas.delete("/candidato/:id", candidatoController.destroy);
 // rotas.get("/avaliacao", avaliacaoController.findAll);
 // rotas.put("/avaliacao/:id", avaliacaoController.update);
 // rotas.delete("/avaliacao/:id", avaliacaoController.destroy);
+
+rotas.post("/logar", (req,res,next) => {
+    passport.authenticate("local", {
+        successRedirect: "/apresentacao",
+        failureRedirect: "login"
+    })(req,res,next)
+})
+
+rotas.get("/logout", (req,res) => {
+    req.logout(req.user, erro => {
+        if(erro) return next(erro);
+        res.redirect("login");
+    })
+})
 
 module.exports = rotas
 
