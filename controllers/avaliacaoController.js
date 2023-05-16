@@ -107,12 +107,11 @@ avaliacaoControlador.abrirVotacao = function(req, res) {
                         port: 80
                     }
                 }
-            ).then((dados) => {
-                res.status(200).redirect("/apresentacao")
-            }).catch((erro) => {
+            ).catch((erro) => {
                 res.status(500).send(`Erro ao atualizar o cliente: `+erro)
             })
         });
+        res.status(200).redirect("/apresentacao")
     }).catch((erro) => {
         res.status(500).send(`Erro ao fechar a votação: `+erro)
     })
@@ -137,12 +136,11 @@ avaliacaoControlador.fecharVotacao = function(req, res) {
                         port: 80
                     }
                 }
-            ).then((dados) => {
-                res.status(200).redirect("/apresentacao")
-            }).catch((erro) => {
+            ).catch((erro) => {
                 res.status(500).send(`Erro ao atualizar o cliente: `+erro)
             })
         });
+        res.status(200).redirect("/apresentacao")
     }).catch((erro) => {
         res.status(500).send(`Erro ao fechar a votação: `+erro)
     })

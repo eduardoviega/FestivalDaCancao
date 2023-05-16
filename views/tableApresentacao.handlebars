@@ -3,8 +3,8 @@
 <a href="/logout"><button type="button" class="my-4 btn btn-danger">Logout</button></a>
 {{#if userAdmin}}
     {{#if votacaoAberta}}
-        <a href="/fecharVotacao"><button type="submit" class="my-4 btn btn-danger">Fechar Votação</button></a>
-        {{else}}<a href="/abrirVotacao"><button type="submit" class="my-4 btn btn-success">Abrir Votação</button></a>
+        <a href="/fecharVotacao"><button type="button" class="my-4 btn btn-danger">Fechar Votação</button></a>
+        {{else}}<a href="/abrirVotacao"><button type="button" class="my-4 btn btn-success">Abrir Votação</button></a>
     {{/if}}
 {{/if}}
 <table class="table">
@@ -26,8 +26,8 @@
                 </ul>
             </th>
             <td style="text-align: right; border-bottom-width: 1px #000;">
-                <a href="/editarApresentacao/{{idApresentacao}}"><button type="submit" class="btn btn-warning">Editar</button></a>
-                <a href="/deleteApresentacao/{{idApresentacao}}"><button type="submit" class="btn btn-danger">Apagar</button></a>
+                <a href="/editarApresentacao/{{idApresentacao}}"><button type="button" class="btn btn-warning">Editar</button></a>
+                <a href="/deleteApresentacao/{{idApresentacao}}"><button type="button" class="btn btn-danger">Apagar</button></a>            
             </td>
         </tr>
         {{/each}}
