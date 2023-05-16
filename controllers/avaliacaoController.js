@@ -5,12 +5,10 @@ var avaliacaoControlador = {}
 avaliacaoControlador.create = function(req, res){
     avaliacao.create({
         nota: req.body.nota,
-        descricao: req.body.descricao,
-        idApresentacao: req.body.idApresentacao,
         idCandidato: req.body.idCandidato
     }).then(
         function(dados) {
-            res.status(200).send(`Avaliação na apresentação: ${req.body.idApresentacao}, cadastrada com sucesso!`)
+            res.status(200).send(`Avaliação cadastrada com sucesso!`)
         }
     ).catch(
         function(erro) {
@@ -52,8 +50,7 @@ avaliacaoControlador.findOne = function(req, res){
 
 avaliacaoControlador.update = function(req, res){
     avaliacao.update({
-        nota: req.body.nota,
-        descricao: req.body.descricao
+        nota: req.body.nota
     },{
         where: {
             idAvaliacao: req.params.id

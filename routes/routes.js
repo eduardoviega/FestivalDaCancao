@@ -12,14 +12,14 @@ rotas.get("/login", usuarioController.mostrarFormLogin)
 
 // Rota das páginas
 rotas.get("/cadastrarApresentacao", autenticado, apresentacaoController.cadastroApresentacao);
-rotas.get("/cadastrarUsuario", autenticado, usuarioController.cadastroUsuario);
+rotas.get("/cadastrarUsuario", usuarioController.cadastroUsuario);
 rotas.get("/apresentacao", autenticado, apresentacaoController.listaApresentacaoCandidato);
 rotas.get("/editarApresentacao/:id", autenticado, apresentacaoController.editarApresentacaoCandidato);
 rotas.post("/editar/:id", autenticado, apresentacaoController.montarReqEdicao);
 rotas.get("/deleteApresentacao/:id", autenticado, apresentacaoController.deleteApresentacaoCandidato);
 
 // Rotas de Usuário da API
-rotas.post("/usuario", autenticado, usuarioController.create);
+rotas.post("/usuario", usuarioController.create);
 rotas.get("/usuario/:id", autenticado, usuarioController.findOne);
 rotas.get("/usuario", autenticado, usuarioController.findAll);
 rotas.put("/usuario/:id", autenticado, usuarioController.update);

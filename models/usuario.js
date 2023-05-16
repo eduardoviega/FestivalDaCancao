@@ -15,6 +15,10 @@ var usuario = banco.define('usuario', {
         type: sequelize.STRING,
         allowNull: false,
     },
+    votacaoAberta: {
+        type: sequelize.BOOLEAN,
+        allowNull: false,
+    },
     administrador: {
         type: sequelize.BOOLEAN,
         allowNull: false,

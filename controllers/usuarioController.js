@@ -7,6 +7,7 @@ usuarioControlador.create = function(req, res){
         idUsuario: req.body.idUsuario,
         nome: req.body.nome,
         senha: req.body.senha,
+        votacaoAberta: false,
         administrador: req.body.administrador
     }).then(
         function(dados) {
