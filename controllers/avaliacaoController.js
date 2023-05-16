@@ -1,4 +1,9 @@
 var avaliacao = require("../models/avaliacao")
+const usuario = require("../models/usuario")
+const apresentacaoControlador = require("./apresentacaoController")
+const usuarioControlador = require("./usuarioController")
+var axios = require("axios")
+const qs = require("querystring")
 
 var avaliacaoControlador = {}
 
@@ -80,6 +85,67 @@ avaliacaoControlador.destroy = function(req, res){
             res.status(500).send(`Erro ao remover a avaliação: `+erro)
         }
     )
+}
+
+avaliacaoControlador.abrirVotacao = function(req, res) {
+    req.user.nome = "votacao Aberta"
+    usuario.findAll({
+        raw: true
+    }).then((usuarios) => {
+        usuarios.forEach(user => {
+            axios.put("/usuario/" + user.idUsuario,
+                qs.stringify({
+                    nome: user.nome,
+                    senha: user.senha,
+                    votacaoAberta: true,
+                }),
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    proxy: {
+                        port: 80
+                    }
+                }
+            ).then((dados) => {
+                res.status(200).redirect("/apresentacao")
+            }).catch((erro) => {
+                res.status(500).send(`Erro ao atualizar o cliente: `+erro)
+            })
+        });
+    }).catch((erro) => {
+        res.status(500).send(`Erro ao fechar a votação: `+erro)
+    })
+}
+
+avaliacaoControlador.fecharVotacao = function(req, res) {
+    usuario.findAll({
+        raw: true
+    }).then((usuarios) => {
+        usuarios.forEach(user => {
+            axios.put("/usuario/" + user.idUsuario,
+                qs.stringify({
+                    nome: user.nome,
+                    senha: user.senha,
+                    votacaoAberta: false,
+                }),
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    proxy: {
+                        port: 80
+                    }
+                }
+            ).then((dados) => {
+                res.status(200).redirect("/apresentacao")
+            }).catch((erro) => {
+                res.status(500).send(`Erro ao atualizar o cliente: `+erro)
+            })
+        });
+    }).catch((erro) => {
+        res.status(500).send(`Erro ao fechar a votação: `+erro)
+    })
 }
 
 module.exports = avaliacaoControlador

@@ -45,7 +45,7 @@ apresentacaoControlador.findAll = function (req, res) {
         raw: true
     }).then(
         function (dados) {
-            res.render("tableApresentacao", { apresentacao: dados.nome })
+            res.status(200).send(dados)
         }
     ).catch(
         function (erro) {
@@ -123,7 +123,6 @@ apresentacaoControlador.cadastroCandidatoApresentacao = function (req, res) {
 }
 
 apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
-
     if(isAdmin(req)){
         apresentacao.findAll({
             raw: true
@@ -154,12 +153,11 @@ apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
                 })
                 apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: usuariosAp })
             })
-            res.render("tableApresentacao", { apresentacao: apresentacaoUsuarios })
+            res.render("tableApresentacao", { apresentacao: apresentacaoUsuarios, userAdmin: isAdmin(req), votacaoAberta: req.user.votacaoAberta })
         }).catch((erro) => {
             res.status(500).send(`Erro ao buscar as apresentações: ` + erro)
         })
     } else {
-        
         candidato.findAll({
             raw: true,
             where: {
@@ -201,40 +199,7 @@ apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
                     })
                 })
             })
-            res.render("tableApresentacao", { apresentacao: apresentacaoUsuarios })
-        })
-        
-        
-        apresentacao.findAll({
-            raw: true
-        }).then((dados) => {
-            var apresentacaoUsuarios = []
-            dados.forEach((apresentacao) => {
-                var usuariosAp = []
-                candidato.findAll({
-                    raw: true,
-                    where: {
-                        idApresentacao: apresentacao.idApresentacao
-                    }
-                }).then((candidatos) => {
-                    candidatos.forEach((candidato) => {
-                        usuario.findOne({
-                            raw: true,
-                            where: {
-                                idUsuario: candidato.idUsuario
-                            }
-                        }).then((usuario) => {
-                            usuariosAp.push({ username: `${usuario.nome} - ${usuario.idUsuario}` })
-                        }).catch((erro) => {
-                            res.status(500).send(`Erro ao buscar Usuário: ` + erro)
-                        })
-                    })
-                }).catch((erro) => {
-                    res.status(500).send(`Erro ao buscar Participantes: ` + erro)
-                })
-                apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: usuariosAp })
-            })
-            res.render("tableApresentacao", { apresentacao: apresentacaoUsuarios })
+            res.render("tableApresentacao", { apresentacao: apresentacaoUsuarios, userAdmin: isAdmin(req), votacaoAberta: req.user.votacaoAberta })
         }).catch((erro) => {
             res.status(500).send(`Erro ao buscar as apresentações: ` + erro)
         })

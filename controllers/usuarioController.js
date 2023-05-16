@@ -53,7 +53,8 @@ usuarioControlador.findAll = function(req, res){
 usuarioControlador.update = function(req, res){
     usuario.update({
         nome: req.body.nome,
-        senha: req.body.senha
+        senha: req.body.senha,
+        votacaoAberta: req.body.votacaoAberta
     },{
         where: {
             idUsuario: req.params.id

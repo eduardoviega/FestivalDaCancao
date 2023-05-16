@@ -1,6 +1,12 @@
 <a href="/cadastrarApresentacao"><button type="button" class="my-4 btn btn-success">Cadastrar Apresentação</button></a>
 <a href="/cadastrarUsuario"><button type="button" class="my-4 btn btn-success">Cadastrar Usuário</button></a>
 <a href="/logout"><button type="button" class="my-4 btn btn-danger">Logout</button></a>
+{{#if userAdmin}}
+    {{#if votacaoAberta}}
+        <a href="/fecharVotacao"><button type="submit" class="my-4 btn btn-danger">Fechar Votação</button></a>
+        {{else}}<a href="/abrirVotacao"><button type="submit" class="my-4 btn btn-success">Abrir Votação</button></a>
+    {{/if}}
+{{/if}}
 <table class="table">
     <thead style="border-bottom-width: 1px; border-color: #000;">
         <tr>

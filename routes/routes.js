@@ -4,10 +4,13 @@ var apresentacaoController = require('../controllers/apresentacaoController')
 var candidatoController = require('../controllers/candidatoController')
 var avaliacaoController = require('../controllers/avaliacaoController')
 const passport = require("passport");
-const {autenticado} = require("../helpers/acesso")
+const {autenticado, admin} = require("../helpers/acesso")
 
 var rotas = express.Router()
 
+rotas.get("/", (req,res) => {
+    res.redirect("login");
+})
 rotas.get("/login", usuarioController.mostrarFormLogin)
 
 // Rota das páginas
@@ -20,9 +23,9 @@ rotas.get("/deleteApresentacao/:id", autenticado, apresentacaoController.deleteA
 
 // Rotas de Usuário da API
 rotas.post("/usuario", usuarioController.create);
-rotas.get("/usuario/:id", autenticado, usuarioController.findOne);
+rotas.get("/usuario/:id", usuarioController.findOne);
 rotas.get("/usuario", autenticado, usuarioController.findAll);
-rotas.put("/usuario/:id", autenticado, usuarioController.update);
+rotas.put("/usuario/:id", usuarioController.update);
 rotas.delete("/usuario/:id", usuarioController.destroy);
 
 // //Rotas de Apresentação da API
@@ -38,8 +41,10 @@ rotas.put("/candidato/:id", autenticado, candidatoController.update);
 rotas.delete("/candidato/:id", candidatoController.destroy);
 
 //Rotas de Avaliação da API
-rotas.post("/avaliacao", autenticado, avaliacaoController.create);
+rotas.get("/abrirVotacao", admin, avaliacaoController.abrirVotacao);
+rotas.get("/fecharVotacao", admin, avaliacaoController.fecharVotacao);
 rotas.get("/avaliacao", autenticado, avaliacaoController.findAll);
+rotas.post("/avaliacao", autenticado, avaliacaoController.create);
 rotas.get("/avaliacao/:id", autenticado, avaliacaoController.findOne);
 rotas.put("/avaliacao/:id", autenticado, avaliacaoController.update);
 rotas.delete("/avaliacao/:id", avaliacaoController.destroy);
