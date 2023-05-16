@@ -116,14 +116,14 @@ apresentacaoControlador.cadastroCandidatoApresentacao = function (req, res) {
                 res.status(500).send("Erro no cadastro do Candidato: " + erro)
             })
         })
-        apresentacaoControlador.listaApresentacaoCandidato(req, res)
+        res.status(200).redirect("/apresentacao")
     }).catch((erro) => {
         res.status(500).send("Erro no cadastro da apresentação: " + erro)
     })
 }
 
 apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
-    if(isAdmin(req)){
+    if(isAdmin(req) || req.user.votacaoAberta){
         apresentacao.findAll({
             raw: true
         }).then((dados) => {
@@ -151,7 +151,7 @@ apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
                 }).catch((erro) => {
                     res.status(500).send(`Erro ao buscar Participantes: ` + erro)
                 })
-                apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: usuariosAp })
+                apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: usuariosAp, votacaoAberta: req.user.votacaoAberta })
             })
             res.render("tableApresentacao", { apresentacao: apresentacaoUsuarios, userAdmin: isAdmin(req), votacaoAberta: req.user.votacaoAberta })
         }).catch((erro) => {
@@ -194,7 +194,7 @@ apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
                             }
                         })
                         if(primeiroCandidato.idUsuario == req.user.idUsuario){
-                            apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: candidatoAp })
+                            apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: candidatoAp, votacaoAberta: req.user.votacaoAberta })
                         }
                     })
                 })
@@ -219,8 +219,8 @@ apresentacaoControlador.editarApresentacaoCandidato = function (req, res) {
 
 // Faz a edição da apresentação
 apresentacaoControlador.montarReqEdicao = function (req, res) {
+    console.log(req.body.nome);
     axios.put("/apresentacao/" + req.params.id,
-    // dentro do qs passar os dados que serão alterados e alterar também no update da apresentacao
         qs.stringify({
             nome: req.body.nome,
         }),

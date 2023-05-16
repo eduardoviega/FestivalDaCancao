@@ -18,7 +18,7 @@ rotas.get("/cadastrarApresentacao", autenticado, apresentacaoController.cadastro
 rotas.get("/cadastrarUsuario", usuarioController.cadastroUsuario);
 rotas.get("/apresentacao", autenticado, apresentacaoController.listaApresentacaoCandidato);
 rotas.get("/editarApresentacao/:id", autenticado, apresentacaoController.editarApresentacaoCandidato);
-rotas.post("/editar/:id", autenticado, apresentacaoController.montarReqEdicao);
+rotas.post("/editar/:id", apresentacaoController.montarReqEdicao);
 rotas.get("/deleteApresentacao/:id", autenticado, apresentacaoController.deleteApresentacaoCandidato);
 
 // Rotas de Usuário da API
@@ -31,7 +31,7 @@ rotas.delete("/usuario/:id", usuarioController.destroy);
 // //Rotas de Apresentação da API
 rotas.get("/apresentacao/:id", autenticado, apresentacaoController.findOne);
 rotas.post("/apresentacao", autenticado, apresentacaoController.cadastroCandidatoApresentacao);
-rotas.put("/apresentacao/:id", autenticado, apresentacaoController.update);
+rotas.put("/apresentacao/:id", apresentacaoController.update);
 rotas.delete("/apresentacao/:id", apresentacaoController.destroy);
 
 // Rotas de Candidato da API
@@ -46,7 +46,7 @@ rotas.get("/fecharVotacao", admin, avaliacaoController.fecharVotacao);
 rotas.get("/avaliacao", autenticado, avaliacaoController.findAll);
 rotas.post("/avaliacao", autenticado, avaliacaoController.create);
 rotas.get("/avaliacao/:id", autenticado, avaliacaoController.findOne);
-rotas.put("/avaliacao/:id", autenticado, avaliacaoController.update);
+rotas.put("/avaliacao/:id", avaliacaoController.update);
 rotas.delete("/avaliacao/:id", avaliacaoController.destroy);
 
 rotas.post("/logar", (req,res,next) => {
