@@ -10,5 +10,6 @@ module.exports = {
             return next()
         }
         res.redirect("/login")
-    }
+    },
+    isAdmin: (req) => req.isAuthenticated() && req.user.administrador
 }

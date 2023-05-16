@@ -8,6 +8,7 @@ var avaliacao = banco.define('avaliacao', {
         type: sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
+        autoIncrement: true
     },
     nota: {
         type: sequelize.INTEGER,

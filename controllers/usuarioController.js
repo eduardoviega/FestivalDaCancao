@@ -1,7 +1,4 @@
-const { raw } = require("express")
 var usuario = require("./../models/usuario")
-const { route } = require("../routes/routes")
-var axios = require("axios")
 
 var usuarioControlador = {}
 

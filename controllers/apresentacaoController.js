@@ -1,9 +1,11 @@
 const { raw } = require("express")
 const usuario = require("../models/usuario")
 var apresentacao = require("../models/apresentacao")
-var candidato = require("./../models/candidato")
+var candidato = require("../models/candidato")
 var axios = require("axios")
 const qs = require("querystring")
+const {autenticado, isAdmin} = require("../helpers/acesso")
+const {admin} = require("../helpers/acesso")
 
 var apresentacaoControlador = {}
 
@@ -121,39 +123,122 @@ apresentacaoControlador.cadastroCandidatoApresentacao = function (req, res) {
 }
 
 apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
-    apresentacao.findAll({
-        raw: true
-    }).then((dados) => {
-        var apresentacaoUsuarios = []
-        dados.forEach((apresentacao) => {
-            var usuariosAp = []
-            candidato.findAll({
-                raw: true,
-                where: {
-                    idApresentacao: apresentacao.idApresentacao
-                }
-            }).then((candidatos) => {
-                candidatos.forEach((candidato) => {
-                    usuario.findOne({
+
+    if(isAdmin(req)){
+        apresentacao.findAll({
+            raw: true
+        }).then((dados) => {
+            var apresentacaoUsuarios = []
+            dados.forEach((apresentacao) => {
+                var usuariosAp = []
+                candidato.findAll({
+                    raw: true,
+                    where: {
+                        idApresentacao: apresentacao.idApresentacao
+                    }
+                }).then((candidatos) => {
+                    candidatos.forEach((candidato) => {
+                        usuario.findOne({
+                            raw: true,
+                            where: {
+                                idUsuario: candidato.idUsuario
+                            }
+                        }).then((usuario) => {
+                            usuariosAp.push({ username: `${usuario.nome} - ${usuario.idUsuario}` })
+                        }).catch((erro) => {
+                            res.status(500).send(`Erro ao buscar Usuário: ` + erro)
+                        })
+                    })
+                }).catch((erro) => {
+                    res.status(500).send(`Erro ao buscar Participantes: ` + erro)
+                })
+                apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: usuariosAp })
+            })
+            res.render("tableApresentacao", { apresentacao: apresentacaoUsuarios })
+        }).catch((erro) => {
+            res.status(500).send(`Erro ao buscar as apresentações: ` + erro)
+        })
+    } else {
+        
+        candidato.findAll({
+            raw: true,
+            where: {
+                idUsuario: req.user.idUsuario
+            }
+        }).then((candidatosLogado) => {
+            var apresentacaoUsuarios = []
+            candidatosLogado.forEach((candidatoLogado)  => {
+                apresentacao.findOne({
+                    raw: true,
+                    where: {
+                        idApresentacao: candidatoLogado.idApresentacao 
+                    }
+                }).then((apresentacao) => {
+                    var candidatoAp = []
+                    candidato.findAll({
                         raw: true,
                         where: {
-                            idUsuario: candidato.idUsuario
+                            idApresentacao: apresentacao.idApresentacao
                         }
-                    }).then((usuario) => {
-                        usuariosAp.push({ username: `${usuario.nome} - ${usuario.idUsuario}` })
-                    }).catch((erro) => {
-                        res.status(500).send(`Erro ao buscar Usuário: ` + erro)
+                    }).then((candidatos) => {
+                        var primeiroCandidato
+                        candidatos.forEach((candi) => {
+                            usuario.findOne({
+                                raw: true,
+                                where: {
+                                    idUsuario: candi.idUsuario
+                                }
+                            }).then((usuarioCandi) => {
+                                candidatoAp.push({ username: `${usuarioCandi.nome} - ${usuarioCandi.idUsuario}` })
+                            })
+                            if(primeiroCandidato == null || primeiroCandidato.idCandidato > candi.idCandidato) {
+                                primeiroCandidato = candi
+                            }
+                        })
+                        if(primeiroCandidato.idUsuario == req.user.idUsuario){
+                            apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: candidatoAp })
+                        }
                     })
                 })
-            }).catch((erro) => {
-                res.status(500).send(`Erro ao buscar Participantes: ` + erro)
             })
-            apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: usuariosAp })
+            res.render("tableApresentacao", { apresentacao: apresentacaoUsuarios })
         })
-        res.render("tableApresentacao", { apresentacao: apresentacaoUsuarios })
-    }).catch((erro) => {
-        res.status(500).send(`Erro ao buscar as apresentações: ` + erro)
-    })
+        
+        
+        apresentacao.findAll({
+            raw: true
+        }).then((dados) => {
+            var apresentacaoUsuarios = []
+            dados.forEach((apresentacao) => {
+                var usuariosAp = []
+                candidato.findAll({
+                    raw: true,
+                    where: {
+                        idApresentacao: apresentacao.idApresentacao
+                    }
+                }).then((candidatos) => {
+                    candidatos.forEach((candidato) => {
+                        usuario.findOne({
+                            raw: true,
+                            where: {
+                                idUsuario: candidato.idUsuario
+                            }
+                        }).then((usuario) => {
+                            usuariosAp.push({ username: `${usuario.nome} - ${usuario.idUsuario}` })
+                        }).catch((erro) => {
+                            res.status(500).send(`Erro ao buscar Usuário: ` + erro)
+                        })
+                    })
+                }).catch((erro) => {
+                    res.status(500).send(`Erro ao buscar Participantes: ` + erro)
+                })
+                apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: usuariosAp })
+            })
+            res.render("tableApresentacao", { apresentacao: apresentacaoUsuarios })
+        }).catch((erro) => {
+            res.status(500).send(`Erro ao buscar as apresentações: ` + erro)
+        })
+    }
 }
 
 // Traz os usuários na página de editar
