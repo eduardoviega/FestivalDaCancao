@@ -6,6 +6,7 @@ var axios = require("axios")
 const qs = require("querystring")
 const {autenticado, isAdmin} = require("../helpers/acesso")
 const {admin} = require("../helpers/acesso")
+const avaliacao = require("../models/avaliacao")
 
 var apresentacaoControlador = {}
 
@@ -276,9 +277,22 @@ apresentacaoControlador.deleteApresentacaoCandidato = function (req, res) {
             idApresentacao: req.params.id
         }
     }).then((candidatos) => {
-        candidatos.forEach((candidato) => {
-            axios.delete('/candidato/' + candidato.idCandidato
-            ).then(
+        candidatos.forEach((candidatoAp) => {
+            avaliacao.findAll({
+                raw: true, 
+                where :{
+                    idCandidato: candidatoAp.idCandidato
+                }
+            }).then((avaliacoes) => {
+                avaliacoes.forEach((avaliacaoCand) => {
+                    axios.delete('/avaliacao/' + avaliacaoCand.idAvaliacao
+                    ).catch((erro) => {
+                        res.status(500).send("Erro na exclusão do Candidato: " + erro)
+                    })
+                })
+            })
+
+            axios.delete('/candidato/' + candidatoAp.idCandidato
             ).catch((erro) => {
                 res.status(500).send("Erro na exclusão do Candidato: " + erro)
             })

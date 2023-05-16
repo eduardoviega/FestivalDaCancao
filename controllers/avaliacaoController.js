@@ -1,4 +1,6 @@
+const apresentacao = require("../models/apresentacao")
 var avaliacao = require("../models/avaliacao")
+const candidato = require("../models/candidato")
 const usuario = require("../models/usuario")
 const apresentacaoControlador = require("./apresentacaoController")
 const usuarioControlador = require("./usuarioController")
@@ -143,6 +145,63 @@ avaliacaoControlador.fecharVotacao = function(req, res) {
         res.status(200).redirect("/apresentacao")
     }).catch((erro) => {
         res.status(500).send(`Erro ao fechar a votação: `+erro)
+    })
+}
+
+avaliacaoControlador.listaVotacao = function(req, res){
+    candidato.findAll({
+        raw: true,
+        where: {
+            idApresentacao: req.params.id
+        }
+    }).then((candidatosAp) => {
+        var usuarios = []
+        candidatosAp.forEach((candidatoAp) => {
+            usuario.findOne({
+                raw: true,
+                where: {
+                    idUsuario: candidatoAp.idUsuario
+                }
+            }).then((user) => {
+                usuarios.push(user)
+            })
+        })
+
+        apresentacao.findOne({
+            raw: true,
+            where: {
+                idApresentacao: req.params.id
+            }
+        }).then((apresentacaoAtual) => {
+            res.render("tableVotacao", { candidatos: usuarios, nome: apresentacaoAtual.nome, id: req.params.id })
+        }).catch((erro) => {
+            res.status(500).send(`Erro ao buscar a apresentação: ` + erro)
+        })
+    }).catch((erro) => {
+        res.status(500).send(`Erro ao buscar os candidatos: ` + erro)
+    })
+}
+
+avaliacaoControlador.montarReqVotacao = function(req, res){
+    candidato.findAll({
+        raw: true,
+        where: {
+            idApresentacao: req.params.id
+        }
+    }).then((candidatosAp) => {
+        candidatosAp.forEach((candidatoAp) => {
+            let nota = req.body[candidatoAp.idUsuario];
+            avaliacao.create({
+                nota: nota,
+                idCandidato: candidatoAp.idCandidato
+            }).then((dados) => {
+            }).catch((erro) => {
+                res.status(500).send("Erro no cadastro da avaliação: "+erro)
+            })
+        })
+        res.status(200).redirect("/apresentacao")
+    }).catch((erro) => {
+        res.status(500).send(`Erro ao buscar os candidatos: ` + erro)
     })
 }
 

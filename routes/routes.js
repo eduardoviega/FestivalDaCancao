@@ -20,6 +20,8 @@ rotas.get("/apresentacao", autenticado, apresentacaoController.listaApresentacao
 rotas.get("/editarApresentacao/:id", autenticado, apresentacaoController.editarApresentacaoCandidato);
 rotas.post("/editar/:id", apresentacaoController.montarReqEdicao);
 rotas.get("/deleteApresentacao/:id", autenticado, apresentacaoController.deleteApresentacaoCandidato);
+rotas.get("/tableVotacao/:id", autenticado, avaliacaoController.listaVotacao);
+rotas.post("/votar/:id", avaliacaoController.montarReqVotacao);
 
 // Rotas de Usuário da API
 rotas.post("/usuario", usuarioController.create);
