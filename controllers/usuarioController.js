@@ -1,4 +1,8 @@
-var usuario = require("./../models/usuario")
+var usuario = require("../models/usuario")
+var candidato = require("../models/candidato")
+var avaliacao = require("../models/avaliacao")
+var apresentacao = require("../models/apresentacao")
+var axios = require("axios")
 
 var usuarioControlador = {}
 
@@ -114,6 +118,63 @@ usuarioControlador.listaUsuarios = function (req, res) {
 }
 
 usuarioControlador.montarReqDelete = function (req, res) {
-    
+    candidato.findAll({
+        raw: true,
+        where: {
+            idUsuario: req.params.id
+        }
+    }).then((candidatos) => {
+        console.log("candidatos", candidatos);
+        candidatos.forEach(candidatoUser => {
+            apresentacao.findOne({
+                raw: true,
+                where: {
+                    idApresentacao: candidatoUser.idApresentacao
+                }
+            }).then((apresentacaoCand) => {
+                console.log("apresentacaoCand", apresentacaoCand);
+                candidato.findAll({
+                    raw: true,
+                    where: {
+                        idApresentacao: apresentacaoCand.idApresentacao
+                    }
+                }).then((candidatosAp) => {
+                    candidatosAp.forEach(candidatoAp => {
+                        console.log("candidatoAp", candidatoAp);
+                        avaliacao.findAll({
+                            raw: true,
+                            where: {
+                                idCandidato: candidatoAp.idCandidato
+                            }
+                        }).then((avaliacoes) => {
+                            avaliacoes.forEach((avaliacaoCand) => {
+                                axios.delete('/avaliacao/' + avaliacaoCand.idAvaliacao
+                                ).catch((erro) => {
+                                    res.status(500).send("Erro na exclusão da Avaliacao: " + erro)
+                                })
+                            })
+                        })
+                        
+                        axios.delete('/candidato/' + candidatoAp.idCandidato
+                        ).catch((erro) => {
+                            res.status(500).send("Erro na exclusão do Candidato: " + erro)
+                        })
+                    })
+                })
+                
+                axios.delete('/apresentacao/' + apresentacaoCand.idApresentacao
+                ).catch((erro) => {
+                    res.status(500).send("Erro na exclusão da Apresentação: " + erro)
+                })
+            })
+        })
+        
+        axios.delete('/usuario/' + req.params.id
+        ).then(() => {
+            res.redirect("/listaUsuarios")
+        }).catch((erro) => {
+            res.status(500).send("Erro na exclusão do Usuário: " + erro)
+        })
+    })
 }
 module.exports = usuarioControlador

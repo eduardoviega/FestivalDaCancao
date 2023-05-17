@@ -2,7 +2,6 @@ var sequelize = require("sequelize")
 var banco = require("./../configs/bancoConfig")
 var apresentacao = require("./apresentacao")
 var usuario = require("./usuario");
-const apre = require("../controllers/apresentacaoController");
 
 var candidato = banco.define('candidato', {
     idCandidato: {
