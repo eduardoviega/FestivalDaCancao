@@ -6,12 +6,16 @@
         <a href="/fecharVotacao"><button type="button" class="my-4 btn btn-danger">Fechar Votação</button></a>
         {{else}}<a href="/abrirVotacao"><button type="button" class="my-4 btn btn-success">Abrir Votação</button></a>
     {{/if}}
+    <a href="/listaUsuarios"><button type="button" class="my-4 btn btn-success">Usuários Cadastrados</button></a>
 {{/if}}
 <table class="table">
     <thead style="border-bottom-width: 1px; border-color: #000;">
         <tr>
             <th scope="col">Nome da Apresentação:</th>
             <th scope="col">Participantes:</th>
+            {{#if votacaoAberta}}
+                {{else}}<th scope="col">Nota:</th>
+            {{/if}}
         </tr>
     </thead>
     <tbody>
@@ -25,6 +29,14 @@
                     {{/each}}
                 </ul>
             </th>
+            {{#if votacaoAberta}}
+            {{else}}
+            <th>
+                <ul>
+                    <ol style="font-weight: 400;">{{nota}}</ol>
+                </ul>
+            </th>
+            {{/if}}
             <td style="text-align: right; border-bottom-width: 1px #000;">
                 {{#if votacaoAberta}}
                 <a href="/tableVotacao/{{idApresentacao}}"><button type="button" class="btn btn-success">Votar</button></a>

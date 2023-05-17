@@ -1,0 +1,24 @@
+<div class="container">
+    <form action="/votar/{{id}}" method="POST">
+        <h2>Votação</h2>
+        <div class="card mt-4 w-50">
+            <div class="card-header">
+                <h5>{{nome}}</h5>
+            </div>
+            <div class="card-body">
+                <h6>Candidatos:</h6>
+                <ul class="list-group">
+                    {{#each candidatos}}
+                    <li class="list-group-item d-flex flex-row justify-content-between">
+                        <span>{{nome}}</span> 
+                        <input name="{{idUsuario}}" type="number" class="form-control-sm ml-2" placeholder="Inserir nota" min="0">
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+
+        <button class="btn btn-primary mt-2" type="submit" id="enviarNotas">Enviar Notas</button>
+        <a href="/apresentacao"><button class="btn btn-danger mt-2" type="button">Voltar</button></a>
+    </form>
+</div>

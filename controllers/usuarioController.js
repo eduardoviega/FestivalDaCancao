@@ -88,7 +88,7 @@ usuarioControlador.destroy = function(req, res){
 
 //----------------------------------------------------------------------------
 
-usuarioControlador.cadastroUsuario = function(req, res){
+usuarioControlador.cadastroUsuario = function (req, res){
     res.render("cadastroUsuario")
 }
 
@@ -103,4 +103,17 @@ usuarioControlador.mostrarFormLogin = function (req, res) {
     }
 };
 
+usuarioControlador.listaUsuarios = function (req, res) {
+    usuario.findAll({
+        raw: true
+    }).then((usuariosList) => {
+        res.render("tableUsuarios", {usuarios: usuariosList})
+    }).catch((erro) => {
+        res.status(500).send("Erro ao acessar buscar usuários: " + erro);
+    })
+}
+
+usuarioControlador.montarReqDelete = function (req, res) {
+    
+}
 module.exports = usuarioControlador

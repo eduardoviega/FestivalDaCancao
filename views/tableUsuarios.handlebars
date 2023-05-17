@@ -1,0 +1,20 @@
+<div class="container">
+<table class="table">
+    <thead style="border-bottom-width: 1px; border-color: #000;">
+        <tr>
+            <th scope="col">Usuários:</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each usuarios}}
+        <tr>
+            <th class="note" scope="row" style="font-weight: 400;">{{nome}} - {{idUsuario}}</th>
+            <td style="text-align: right; border-bottom-width: 1px #000;">
+                <a href="/editarUsuario/{{idUsuario}}"><button type="button" class="btn btn-warning">Editar</button></a>
+                <a href="/deleteUsuario/{{idUsuario}}"><button type="button" class="btn btn-danger">Apagar</button></a>       
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+</div>

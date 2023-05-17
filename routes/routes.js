@@ -22,6 +22,7 @@ rotas.post("/editar/:id", apresentacaoController.montarReqEdicao);
 rotas.get("/deleteApresentacao/:id", autenticado, apresentacaoController.deleteApresentacaoCandidato);
 rotas.get("/tableVotacao/:id", autenticado, avaliacaoController.listaVotacao);
 rotas.post("/votar/:id", avaliacaoController.montarReqVotacao);
+rotas.get("/listaUsuarios", admin, usuarioController.listaUsuarios);
 
 // Rotas de Usuário da API
 rotas.post("/usuario", usuarioController.create);
@@ -29,6 +30,7 @@ rotas.get("/usuario/:id", usuarioController.findOne);
 rotas.get("/usuario", autenticado, usuarioController.findAll);
 rotas.put("/usuario/:id", usuarioController.update);
 rotas.delete("/usuario/:id", usuarioController.destroy);
+rotas.get("/deleteUsuario/:id", usuarioController.montarReqDelete);
 
 // //Rotas de Apresentação da API
 rotas.get("/apresentacao/:id", autenticado, apresentacaoController.findOne);
