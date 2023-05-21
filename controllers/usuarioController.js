@@ -191,20 +191,22 @@ usuarioControlador.editarUsuario = function(req, res){
 
 usuarioControlador.montarReqEdicaoUsuario = function(req, res){
     axios.put("/usuario/" + req.params.id,
-    qs.stringify({
-        nome: req.body.nome,
-    }),
-    {
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        proxy: {
-            port: 80
+        qs.stringify({
+            nome: req.body.nome,
+        }),
+        {   
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            proxy: {
+                port: 80
+            }
         }
-    }).then(() => {
+    ).then(() => {
         res.status(200).redirect("/listaUsuarios")
     }).catch((erro) => {
         res.status(500).send("Erro na edição da Apresentação: " + erro)
     });
 }
+
 module.exports = usuarioControlador

@@ -22,7 +22,7 @@ rotas.post("/editar/:id", apresentacaoController.montarReqEdicao);
 rotas.get("/deleteApresentacao/:id", autenticado, apresentacaoController.deleteApresentacaoCandidato);
 rotas.get("/tableVotacao/:id", autenticado, avaliacaoController.listaVotacao);
 rotas.post("/votar/:id", avaliacaoController.montarReqVotacao);
-rotas.get("/listaUsuarios", admin, usuarioController.listaUsuarios);
+rotas.get("/listaUsuarios", usuarioController.listaUsuarios);
 rotas.get("/editarUsuario/:id", usuarioController.editarUsuario);
 rotas.post("/editarUser/:id", usuarioController.montarReqEdicaoUsuario);
 
