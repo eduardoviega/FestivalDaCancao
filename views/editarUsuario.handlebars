@@ -1,0 +1,50 @@
+<h2>Editar Usuário:</h2>
+<form action="/editarUser" method="POST">
+
+  <label for="nome">Nome:</label>
+  <input type="text" id="nome" name="nome" required>
+
+  <div style="display: flex; flex-direction: row; justify-content: space-between;">
+    <button type="submit" class="btn btn-success">Salvar</button>
+  </div>
+</form>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #eaeaea;
+  }
+
+  h1, h2 {
+    color: #333;
+    font-family: "Roboto";
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin: 0 auto;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 10px;
+    color: #666;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+  }
+</style>

@@ -3,6 +3,7 @@ var candidato = require("../models/candidato")
 var avaliacao = require("../models/avaliacao")
 var apresentacao = require("../models/apresentacao")
 var axios = require("axios")
+const qs = require("querystring")
 
 var usuarioControlador = {}
 
@@ -176,5 +177,34 @@ usuarioControlador.montarReqDelete = function (req, res) {
             res.status(500).send("Erro na exclusão do Usuário: " + erro)
         })
     })
+}
+
+usuarioControlador.editarUsuario = function(req, res){
+    usuario.findAll({
+        raw: true
+    }).then((dados) => {
+        res.render("editarUsuario", {idUsuario: req.params.id})
+    }).catch((erro) => {
+        res.status(500).send(`Erro ao buscar os usuários: ` + erro)
+    })
+}
+
+usuarioControlador.montarReqEdicaoUsuario = function(req, res){
+    axios.put("/usuario/" + req.params.id,
+    qs.stringify({
+        nome: req.body.nome,
+    }),
+    {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        proxy: {
+            port: 80
+        }
+    }).then(() => {
+        res.status(200).redirect("/listaUsuarios")
+    }).catch((erro) => {
+        res.status(500).send("Erro na edição da Apresentação: " + erro)
+    });
 }
 module.exports = usuarioControlador
