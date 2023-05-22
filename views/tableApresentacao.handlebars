@@ -33,7 +33,11 @@
             {{else}}
             <th>
                 <ul>
-                    <ol style="font-weight: 400;">{{nota}}</ol>
+                    <ol style="font-weight: 400;">
+                    {{#each notas}}
+                        {{nota}}
+                    {{/each}}
+                    </ol>
                 </ul>
             </th>
             {{/if}}

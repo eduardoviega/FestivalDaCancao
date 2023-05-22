@@ -131,6 +131,7 @@ apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
             var apresentacaoUsuarios = []
             dados.forEach((apresentacao) => {
                 var usuariosAp = []
+                var notaAp = []
                 candidato.findAll({
                     raw: true,
                     where: {
@@ -149,10 +150,25 @@ apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
                             res.status(500).send(`Erro ao buscar Usuário: ` + erro)
                         })
                     })
+
+                    candidatos.forEach((candidato) => {
+                        avaliacao.findAll({
+                            raw: true,
+                            where: {
+                                idCandidato: candidato.idCandidato
+                            }
+                        }).then((avaliacoes) => {
+                            avaliacoes.forEach(avaliacaoCand => {
+                                notaAp.push({nota: avaliacaoCand.nota}) 
+                            });
+                        }).catch((erro) => {
+                            res.status(500).send(`Erro ao buscar Candidato: ` + erro)
+                        })
+                    })
                 }).catch((erro) => {
                     res.status(500).send(`Erro ao buscar Participantes: ` + erro)
                 })
-                apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: usuariosAp, votacaoAberta: req.user.votacaoAberta })
+                apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: usuariosAp, votacaoAberta: req.user.votacaoAberta, notas: notaAp })
             })
             res.render("tableApresentacao", { apresentacao: apresentacaoUsuarios, userAdmin: isAdmin(req), votacaoAberta: req.user.votacaoAberta })
         }).catch((erro) => {
