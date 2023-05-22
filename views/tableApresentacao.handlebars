@@ -13,8 +13,10 @@
         <tr>
             <th scope="col">Nome da Apresentação:</th>
             <th scope="col">Participantes:</th>
-            {{#if votacaoAberta}}
-                {{else}}<th scope="col">Nota:</th>
+            {{#if userAdmin}}
+                {{#if votacaoAberta}}
+                    {{else}}<th scope="col">Nota:</th>
+                {{/if}}
             {{/if}}
         </tr>
     </thead>
