@@ -132,6 +132,7 @@ apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
             dados.forEach((apresentacao) => {
                 var usuariosAp = []
                 var notaAp = []
+                var notaTotal = 0
                 candidato.findAll({
                     raw: true,
                     where: {
@@ -159,8 +160,9 @@ apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
                             }
                         }).then((avaliacoes) => {
                             avaliacoes.forEach(avaliacaoCand => {
-                                notaAp.push({nota: avaliacaoCand.nota}) 
+                                notaTotal += avaliacaoCand.nota
                             });
+                            notaAp.push({nota: notaTotal})
                         }).catch((erro) => {
                             res.status(500).send(`Erro ao buscar Candidato: ` + erro)
                         })
