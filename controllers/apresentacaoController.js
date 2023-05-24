@@ -7,6 +7,7 @@ const qs = require("querystring")
 const {autenticado, isAdmin} = require("../helpers/acesso")
 const {admin} = require("../helpers/acesso")
 const avaliacao = require("../models/avaliacao")
+var sequelize = require("../configs/bancoConfig")
 
 var apresentacaoControlador = {}
 
@@ -123,7 +124,16 @@ apresentacaoControlador.cadastroCandidatoApresentacao = function (req, res) {
     })
 }
 
-apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
+apresentacaoControlador.listaApresentacaoCandidato = async function (req, res) {
+    
+sequelize.query(
+    `SELECT ap."idApresentacao", ap.nome, av.nota from apresentacao as ap, candidato as ca, avaliacao as av 
+    WHERE ap."idApresentacao" = ca."idApresentacao" AND ca."idCandidato" = av."idCandidato" 
+    ORDER BY av.nota DESC`
+    ).then((dados) => {
+        console.log(dados[0]);
+    })
+
     if(isAdmin(req) || req.user.votacaoAberta){
         apresentacao.findAll({
             raw: true
@@ -132,7 +142,7 @@ apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
             dados.forEach((apresentacao) => {
                 var usuariosAp = []
                 var notaAp = []
-                var notaTotal = 0
+                var notaTotal = null
                 candidato.findAll({
                     raw: true,
                     where: {
@@ -160,7 +170,9 @@ apresentacaoControlador.listaApresentacaoCandidato = function (req, res) {
                             }
                         }).then((avaliacoes) => {
                             avaliacoes.forEach(avaliacaoCand => {
-                                notaTotal += avaliacaoCand.nota
+                                if(avaliacaoCand.nota > 0){
+                                    notaTotal += avaliacaoCand.nota
+                                }
                             });
                             notaAp.push({nota: notaTotal})
                         }).catch((erro) => {
