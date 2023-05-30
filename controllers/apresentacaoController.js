@@ -130,12 +130,13 @@ apresentacaoControlador.listaApresentacaoCandidato = async function (req, res) {
         sequelize.query(
         `SELECT ap."idApresentacao", 
         ap.nome AS nome,
+        CASE WHEN SUM(av.nota) IS NULL THEN 1 ELSE 0 END AS sem_nota,
         SUM(av.nota) AS nota
         FROM apresentacao ap
         INNER JOIN candidato ca ON ap."idApresentacao" = ca."idApresentacao"
-        INNER JOIN avaliacao av ON ca."idCandidato" = av."idCandidato"
+        LEFT JOIN avaliacao av ON ca."idCandidato" = av."idCandidato"
         GROUP BY ap."idApresentacao", ap.nome
-        ORDER BY nota DESC`
+        ORDER BY sem_nota, nota DESC`
         ).then((apresentacoes) => {
             var apresentacaoUsuarios = []
             apresentacoes[0].forEach((apresentacao) => {
@@ -158,7 +159,7 @@ apresentacaoControlador.listaApresentacaoCandidato = async function (req, res) {
                             res.status(500).send(`Erro ao buscar Usuário: ` + erro)
                         })
                     })
-                    apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: usuariosAp, votacaoAberta: req.user.votacaoAberta, nota: apresentacao.nota })
+                    apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: usuariosAp, votacaoAberta: req.user.votacaoAberta, nota: apresentacao.nota || 0 })
                 }).catch((erro) => {
                     res.status(500).send(`Erro ao buscar Participantes: ` + erro)
                 })
