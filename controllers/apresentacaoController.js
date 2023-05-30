@@ -126,29 +126,26 @@ apresentacaoControlador.cadastroCandidatoApresentacao = function (req, res) {
 
 apresentacaoControlador.listaApresentacaoCandidato = async function (req, res) {
     
-sequelize.query(
-    `SELECT ap."idApresentacao", ap.nome, av.nota from apresentacao as ap, candidato as ca, avaliacao as av 
-    WHERE ap."idApresentacao" = ca."idApresentacao" AND ca."idCandidato" = av."idCandidato" 
-    ORDER BY av.nota DESC`
-    ).then((dados) => {
-        console.log(dados[0]);
-    })
-
-    if(isAdmin(req) || req.user.votacaoAberta){
-        apresentacao.findAll({
-            raw: true
-        }).then((dados) => {
+    if(isAdmin(req) || req.user.votacaoAberta) {
+        sequelize.query(
+        `SELECT ap."idApresentacao", 
+        ap.nome AS nome,
+        SUM(av.nota) AS nota
+        FROM apresentacao ap
+        INNER JOIN candidato ca ON ap."idApresentacao" = ca."idApresentacao"
+        INNER JOIN avaliacao av ON ca."idCandidato" = av."idCandidato"
+        GROUP BY ap."idApresentacao", ap.nome
+        ORDER BY nota DESC`
+        ).then((apresentacoes) => {
             var apresentacaoUsuarios = []
-            dados.forEach((apresentacao) => {
-                var usuariosAp = []
-                var notaAp = []
-                var notaTotal = null
+            apresentacoes[0].forEach((apresentacao) => {
                 candidato.findAll({
                     raw: true,
                     where: {
                         idApresentacao: apresentacao.idApresentacao
                     }
                 }).then((candidatos) => {
+                    var usuariosAp = []
                     candidatos.forEach((candidato) => {
                         usuario.findOne({
                             raw: true,
@@ -161,32 +158,14 @@ sequelize.query(
                             res.status(500).send(`Erro ao buscar Usuário: ` + erro)
                         })
                     })
-
-                    candidatos.forEach((candidato) => {
-                        avaliacao.findAll({
-                            raw: true,
-                            where: {
-                                idCandidato: candidato.idCandidato
-                            }
-                        }).then((avaliacoes) => {
-                            avaliacoes.forEach(avaliacaoCand => {
-                                if(avaliacaoCand.nota > 0){
-                                    notaTotal += avaliacaoCand.nota
-                                }
-                            });
-                            notaAp.push({nota: notaTotal})
-                        }).catch((erro) => {
-                            res.status(500).send(`Erro ao buscar Candidato: ` + erro)
-                        })
-                    })
+                    apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: usuariosAp, votacaoAberta: req.user.votacaoAberta, nota: apresentacao.nota })
                 }).catch((erro) => {
                     res.status(500).send(`Erro ao buscar Participantes: ` + erro)
                 })
-                apresentacaoUsuarios.push({ idApresentacao: apresentacao.idApresentacao, nome: apresentacao.nome, usuarios: usuariosAp, votacaoAberta: req.user.votacaoAberta, notas: notaAp })
             })
             res.render("tableApresentacao", { apresentacao: apresentacaoUsuarios, userAdmin: isAdmin(req), votacaoAberta: req.user.votacaoAberta })
         }).catch((erro) => {
-            res.status(500).send(`Erro ao buscar as apresentações: ` + erro)
+            res.status(500).send(`Erro ao buscar as apresentações e notas: ` + erro)
         })
     } else {
         candidato.findAll({
