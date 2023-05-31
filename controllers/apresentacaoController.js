@@ -230,7 +230,6 @@ apresentacaoControlador.editarApresentacaoCandidato = function (req, res) {
 
 // Faz a edição da apresentação
 apresentacaoControlador.montarReqEdicao = function (req, res) {
-    console.log(req.body.nome);
     axios.put("/apresentacao/" + req.params.id,
         qs.stringify({
             nome: req.body.nome,
@@ -277,7 +276,6 @@ apresentacaoControlador.montarReqEdicao = function (req, res) {
             res.status(500).send("Erro no cadastro do Candidato: " + erro)
         })
     })
-    apresentacaoControlador.listaApresentacaoCandidato(req, res)
 }
 
 apresentacaoControlador.deleteApresentacaoCandidato = function (req, res) {
